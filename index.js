@@ -9,7 +9,7 @@ try {
 } catch (error) {
     console.log('Não foi possível encontrar o arquivo: '+fileToSpec);
     console.log('Criando arquivo em branco...')
-    fs.writeFileSync(fileToSpec);
+    fs.writeFileSync(fileToSpec,'');
     console.log('Cole seu log no arquivo ',fileToSpec,'e salve as alterações para ter a referência dos Warnings encontrados.')
     process.exit();
 }
