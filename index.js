@@ -10,8 +10,13 @@ try {
     console.log('Não foi possível encontrar o arquivo: '+fileToSpec);
     process.exit();
 }
+
+
 let slices = file.split('WARNING');
 let errors = []
+
+//console.log( slices );
+//exit();
 
 let typesOfErrors = [];
 let filesAffected = [];
@@ -20,15 +25,22 @@ let filesAffected = [];
 fs.readFileSync('./warnings.log', 'utf-8');
 
 slices.forEach(function (item) {
-    if (item.search('checkmarx') > -1) {
+    if (item.search('checkmarx') > -1 && item.search('Vulnerability:') > -1) {
         cleanObject = [];
 
-        //Separar vulnerabilidade de source e destination
-        cleanObject.Vulnerability = item.split(': Destination')[0]
-        cleanObject.Destination = item.split(': Destination')[1].split(' Source')[0]
-        cleanObject.Source = item.split(': Destination')[1].split(', Source')[1]
-        cleanObject.Object = cleanObject.Destination.split('object=')[1]
-        cleanObject.Destination = cleanObject.Destination.split('object=')[0]
+
+        try {
+            
+            //Separar vulnerabilidade de source e destination
+            cleanObject.Vulnerability = item.split(': Destination')[0]
+            cleanObject.Destination = item.split(': Destination')[1].split(' Source')[0]
+            cleanObject.Source = item.split(': Destination')[1].split(', Source')[1]
+            cleanObject.Object = cleanObject.Destination.split('object=')[1]
+            cleanObject.Destination = cleanObject.Destination.split('object=')[0]
+
+        } catch ( error ){
+            console.log('Erro na estrutura da string: ', item);
+        }
 
         
         item = cleanObject;
@@ -44,11 +56,16 @@ slices.forEach(function (item) {
         finalObject.weight = weight
         
 
-        if (!!cleanObject.Source) {
-            finalObject['details'] = cleanObject.Source.replace('\[', '').replace('\]', '').split(',')
-        } else {
-            finalObject['details'] = cleanObject.Destination.replace('\[', '').replace('\]', '').split(',')
+        try {
+            if (!!cleanObject.Source) {
+                finalObject['details'] = cleanObject.Source.replace('\[', '').replace('\]', '').split(',')
+            } else {
+                finalObject['details'] = cleanObject.Destination.replace('\[', '').replace('\]', '').split(',')
+            }
+        } catch (error) {
+            console.log('Erro na estrutura do objeto: ', finalObject);
         }
+
 
         finalObject.details.forEach(param => {
             param = param.replace('\[', '').replace('\]', '')
