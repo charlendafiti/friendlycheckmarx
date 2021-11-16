@@ -1,0 +1,1 @@
+nodemon --exec "clear && node ./index.js" -w index.js -w warnings.log
