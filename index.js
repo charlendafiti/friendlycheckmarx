@@ -99,8 +99,8 @@ slices.forEach(function (item) {
 
         //Push the error reference to links
         let includeFolder = !!finalObject.folder ? finalObject.folder+'\/' : '';
-        if (!filesAffected[finalObject.filename][finalObject.typeOfError+'_'+weight].includes(relativePathToAliceOnWorkspace + includeFolder + finalObject.filename + ':' + finalObject.line + ':' + finalObject.column)) {
-            filesAffected[finalObject.filename][finalObject.typeOfError+'_'+weight].push(relativePathToAliceOnWorkspace + includeFolder + finalObject.filename + ':' + finalObject.line + ':' + finalObject.column)
+        if (!filesAffected[finalObject.filename][finalObject.typeOfError+'_'+weight].includes((relativePathToAliceOnWorkspace + includeFolder + finalObject.filename + ':' + finalObject.line + ':' + finalObject.column).trim())) {
+            filesAffected[finalObject.filename][finalObject.typeOfError+'_'+weight].push((relativePathToAliceOnWorkspace + includeFolder + finalObject.filename + ':' + finalObject.line + ':' + finalObject.column).trim())
         }
 
         filesAffected[finalObject.filename].totalErrors++
